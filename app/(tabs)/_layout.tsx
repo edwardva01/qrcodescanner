@@ -29,29 +29,20 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Configure',
+          tabBarIcon: ({ color }) => <TabBarIcon name="sliders" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
+             
             </Link>
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="readQR"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Read QR',
+          tabBarIcon: ({ color }) => <TabBarIcon name="qrcode" color={color} />,
         }}
       />
     </Tabs>
