@@ -56,6 +56,7 @@ setUuid(uuidTmp);
       if (response.data.success) {
         // Entrada verificada correctamente
         //alert('Entrada verificada correctamente');
+        setScanned(false);
         setCodigoCompra(response.data.compra)
         setConfirmed(true)
       } else {
