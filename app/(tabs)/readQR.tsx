@@ -44,7 +44,7 @@ await SecureStore.setItemAsync('secure_deviceid', JSON.stringify(uuidTmp));
 setUuid(uuidTmp);
 } catch (error) {
   // Manejar el error de la solicitud
-  console.log('Error al realizar la solicitud:', error);
+  console.log('Error al realizar la solicitud4:', error);
 }
 })();
   }, []);
@@ -56,17 +56,21 @@ setUuid(uuidTmp);
       if (response.data.success) {
         // Entrada verificada correctamente
         //alert('Entrada verificada correctamente');
-        setScanned(false);
+        setScanned(true);
         setCodigoCompra(response.data.compra)
         setConfirmed(true)
       } else {
         // Mostrar mensaje de error
         console.log('Error al verificar la entrada:', response.data.message);
+        setScanned(true);
       }
     } catch (error:any) {
       // Manejar el error de la solicitud
+      if (typeof error.response.data.message !== "undefined") {
       alert(error.response.data.message);
-      console.log('Error al realizar la solicitud:', error.response.data.message);
+      }
+      console.log('Error al realizar la solicitud1:', error.response.data.message);
+      setScanned(true);
     }
   };
 
@@ -77,6 +81,10 @@ setUuid(uuidTmp);
     setEntrada("");
     setUuid("")
   }
+
+  const delay = (ms:any) => new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
 
   const onConfirm = () => {
     setScanned(true)
@@ -93,25 +101,31 @@ setUuid(uuidTmp);
       if (response.data.success) {
         // Entrada verificada correctamente
         alert('Entrada verificada correctamente');
+        await delay(3000)
         onAgain();
       } else {
         // Mostrar mensaje de error
         console.log('Error al verificar la entrada:', response.data.message);
+        setScanned(true)
       }
     } catch (error:any) {
       // Manejar el error de la solicitud
-      alert(error.response.data.message);
-      console.log('Error al realizar la solicitud:', error.response.data.message);
+      if (typeof error.response.data.message !== "undefined") {
+        alert(error.response.data.message);
+      }
+      setScanned(true)
+      console.log('Error al realizar la solicitud2:', error);
     }
   };
 
   const handleBarCodeScanned = ({ type, data }: BarcodeData) => {
     // ...
-    setScanned(true);
+    //setScanned(true);
    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     //verificarEntrada(data)
    // setConfirmed(true);
     obtenerEntrada(data)
+    onConfirm()
   };
 if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
@@ -129,9 +143,9 @@ if (hasPermission === false) {
       />
       <Text style={{fontSize:24, fontWeight:"bold"}}>{`Orden #${codigoCompra}`}</Text>
       {/* {scanned && <Button title={'Tap to Scan Again'} onPress={() => onAgain() } />} */}
-      {confirmed && <Button title={'Confirm'} onPress={() => onConfirm()} />}
-      {scanned && <Button title={'Continue'} onPress={() => setScanned(false)} />}
-      {confirmed && <Button color={"red"} title={'Cancel'} onPress={() => onAgain()} />}
+      {/*confirmed && <Button title={'Confirm'} onPress={() => onConfirm()} />*/}
+      {scanned && <Button title={'Continue'} onPress={() => onAgain()} />}
+      {/*confirmed && <Button color={"red"} title={'Cancel'} onPress={() => onAgain()} />*/}
        {/* <Button title={'Tap to Scan Simula'} onPress={() => scanned ? undefined : handleBarCodeScanned({"type":"","data":"5343"})} />  */}
     </View>
     </View>

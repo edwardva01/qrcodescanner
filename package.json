@@ -18,6 +18,7 @@
     "axios": "^1.6.7",
     "expo": "~50.0.3",
     "expo-barcode-scanner": "~12.9.2",
+    "expo-dev-client": "~3.3.8",
     "expo-font": "~11.10.2",
     "expo-linking": "~6.2.2",
     "expo-router": "~3.4.5",
@@ -34,8 +35,8 @@
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
     "react-native-web": "~0.19.6",
-    "uuidv4": "^6.2.13",
-    "expo-dev-client": "~3.3.8"
+    "react-random-reveal": "^2.0.0",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -45,6 +45,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="qrcode" color={color} />,
         }}
       />
-    </Tabs>
+    <Tabs.Screen
+    name="contest"
+    options={{
+      title: 'Contest',
+      tabBarIcon: ({ color }) => <TabBarIcon name="gift" color={color} />,
+    }}
+  />
+</Tabs>
   );
 }
