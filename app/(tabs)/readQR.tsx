@@ -50,8 +50,10 @@ setUuid(uuidTmp);
   }, []);
 
   const obtenerEntrada = async (idEntrada:string) => {
+    let errorE = false 
     try {
       const response = await axios.get("https://5558-75-13-64-129.ngrok-free.app/buscar-entrada?entrada=" + idEntrada);
+      //console.log(response)
       setEntrada(idEntrada) 
       if (response.data.success) {
         // Entrada verificada correctamente
@@ -61,17 +63,22 @@ setUuid(uuidTmp);
         setConfirmed(true)
       } else {
         // Mostrar mensaje de error
+        errorE = true 
         console.log('Error al verificar la entrada:', response.data.message);
         setScanned(true);
       }
     } catch (error:any) {
+      setScanned(true);
+      errorE = true 
       // Manejar el error de la solicitud
       if (typeof error.response.data.message !== "undefined") {
       alert(error.response.data.message);
+      //await delay(15000)
       }
       console.log('Error al realizar la solicitud1:', error.response.data.message);
-      setScanned(true);
+     
     }
+    return errorE;
   };
 
   const onAgain = () => {
@@ -86,22 +93,23 @@ setUuid(uuidTmp);
     resolve => setTimeout(resolve, ms)
   );
 
-  const onConfirm = () => {
+  const onConfirm = (identrada:string) => {
     setScanned(true)
-    verificarEntrada(entrada)
+    verificarEntrada(identrada)
   }
 
   const verificarEntrada = async (idEntrada:string) => {
     try {
-      const response = await axios.put("http://5558-75-13-64-129.ngrok-free.app/verificar-entrada", {
+      const response = await axios.put("https://5558-75-13-64-129.ngrok-free.app/verificar-entrada", {
         id_entrada: idEntrada,
         id_dispositivo: uuid,
       });
   
       if (response.data.success) {
+        setScanned(false)
         // Entrada verificada correctamente
         alert('Entrada verificada correctamente');
-        await delay(3000)
+        await delay(5000)
         onAgain();
       } else {
         // Mostrar mensaje de error
@@ -109,23 +117,36 @@ setUuid(uuidTmp);
         setScanned(true)
       }
     } catch (error:any) {
+      setScanned(true)
       // Manejar el error de la solicitud
       if (typeof error.response.data.message !== "undefined") {
         alert(error.response.data.message);
+        await delay(10000)
       }
-      setScanned(true)
+      
       console.log('Error al realizar la solicitud2:', error);
     }
   };
 
+  const onScan = async () => {
+    var resultError = await obtenerEntrada(entrada)
+    console.log("resultError", resultError)
+    if (!resultError){
+    onConfirm(entrada)
+    }
+  }
+
   const handleBarCodeScanned = ({ type, data }: BarcodeData) => {
     // ...
-    //setScanned(true);
+    
+   // setScanned(true);
    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     //verificarEntrada(data)
    // setConfirmed(true);
-    obtenerEntrada(data)
-    onConfirm()
+   setEntrada(data)
+   console.log("data", data)
+    //obtenerEntrada(data)
+    //onConfirm(data)
   };
 if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
@@ -144,6 +165,7 @@ if (hasPermission === false) {
       <Text style={{fontSize:24, fontWeight:"bold"}}>{`Orden #${codigoCompra}`}</Text>
       {/* {scanned && <Button title={'Tap to Scan Again'} onPress={() => onAgain() } />} */}
       {/*confirmed && <Button title={'Confirm'} onPress={() => onConfirm()} />*/}
+      {!scanned && <Button title={'Scan'} onPress={() => onScan()} />}
       {scanned && <Button title={'Continue'} onPress={() => onAgain()} />}
       {/*confirmed && <Button color={"red"} title={'Cancel'} onPress={() => onAgain()} />*/}
        {/* <Button title={'Tap to Scan Simula'} onPress={() => scanned ? undefined : handleBarCodeScanned({"type":"","data":"5343"})} />  */}
